@@ -81,7 +81,7 @@ mount_natshare() {
 	fi
 
 	append _mount_path "$MOUNTAREA/${server}-$name"
-	append _agm "-o ${USERS}${GUEST}domain=$WORKGROUPD,iocharset=$IOCHARSET$AGM"
+	append _agm "-o ${USERS}${GUEST}domain=$WORKGROUPD,iocharset=$IOCHARSET$AGM,vers=1.0"
 	
 	sleep 1
 	mkdir -p $_mount_path
@@ -126,7 +126,7 @@ start() {
 		fi
 
 		config_foreach mount_natshare natshare
-		/etc/init.d/samba restart
+		/etc/init.d/samba4 restart
 
 		echo "Cifs Mount succeed."
 		}
@@ -152,7 +152,7 @@ restart() {
 	config_load cifs
 	config_foreach cifs_header cifs
 
-	/etc/init.d/samba stop
+	/etc/init.d/samba4 stop
 
 	config_foreach umount_natshare natshare
 
@@ -167,7 +167,7 @@ restart() {
 		echo 'Starting... '
 
 		config_foreach mount_natshare natshare
-		/etc/init.d/samba restart
+		/etc/init.d/samba4 restart
 
 		echo "Cifs Mount succeed."
 		}
