@@ -43,6 +43,7 @@ mount_natshare() {
 	local users
 	local pwd
 	local agm
+	local smbver
 	
 	local _mount_path
 	local _agm
@@ -54,16 +55,17 @@ mount_natshare() {
 	config_get users $1 users
 	config_get pwd $1 pwd
 	config_get agm $1 agm
+	config_get smbver $1 smbver
 
-	if [ $guest == 1 ]
+	if [ "$guest" == 1 ]
 	then 
 		GUEST="guest,"
 		USERS=""
-		else if [ $guest == 0 ]
+		else if [ "$guest" == 0 ]
 		then {
-			if [ $users ]
+			if [ "$users" ]
 			then
-				USERS="username=$users,password=$pwd,"
+				USERS="username=\"$users\",password=\"$pwd\","
 				GUEST=""
 			else
 				USERS=""
@@ -81,11 +83,12 @@ mount_natshare() {
 	fi
 
 	append _mount_path "$MOUNTAREA/${server}-$name"
-	append _agm "-o ${USERS}${GUEST}domain=$WORKGROUPD,iocharset=$IOCHARSET$AGM,vers=1.0"
+	#windows 7 use vers 1.0, win10 need 2.0
+	append _agm "${USERS}${GUEST}domain=$WORKGROUPD,iocharset=$IOCHARSET$AGM,vers=$smbver"
 	
 	sleep 1
 	mkdir -p $_mount_path
-	mount -t cifs $natpath $_mount_path $_agm
+	mount -t cifs $natpath $_mount_path -o "$_agm"
 }
 
 umount_natshare() {
