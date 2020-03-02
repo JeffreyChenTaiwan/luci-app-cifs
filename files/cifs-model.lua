@@ -59,6 +59,11 @@ server = s:option(Value, "server", translate("Server")
 server.size = 6
 server.rmempty = false
 
+smbver = s:option(Value, "smbver", translate("Version")
+        , translate("SMB Version"))
+smbver.size = 3
+smbver.rmempty = false
+
 name = s:option(Value, "name", translate("Name")
         , translate("Mouting Folder Name"))
 name.size = 6
